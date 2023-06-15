@@ -5,7 +5,6 @@ const connectDatabase = require("./helpers/database/connectDatabase.js");
 
 const errorHandler = require("./middlewares/errors/errorHandler.js");
 
-
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 5000;
@@ -15,12 +14,14 @@ const PORT = process.env.PORT || 5000;
 dotenv.config({path : "./config/config.env"});
 
 
-
 // Routes
 app.use("/api",routes);
 
 // MongoDb Connection
 connectDatabase();
+
+// Static Files - Uploads
+app.use(express.static("public"));
 
 // Error Handler Middleware
 app.use(errorHandler);
