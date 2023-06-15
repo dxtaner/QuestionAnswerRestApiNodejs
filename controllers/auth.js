@@ -1,8 +1,9 @@
-const User = require("../models/User");
+const User = require("../models/User.js");
 const CustomError = require("../helpers/error/customError.js");
 const errorWrapper = require("../helpers/error/errorWrapper.js");
 const sendTokenToClient = require("../helpers/authorization/auth.js");
 const bcrypt = require("bcryptjs");
+const sendMail = require("../helpers/libraries/sendEmail.js");
 
 const register = errorWrapper(async (req, res, next) => {
   const { name, email, password, role } = req.body;
@@ -77,9 +78,48 @@ const imageUpload = errorWrapper(async (req, res, next) => {
   );
   res.status(200).json({
     success: true,
-    data:user,
+    data: user,
     message: "Photo Upload Successful",
   });
+});
+
+const forgotPassword = errorWrapper(async (req, res, next) => {
+  const resetEmail = req.body.email;
+  const user = await User.findOne({ email: resetEmail });
+
+  if (!user) {
+    return next(new CustomError("User Not Found With That Email", 400));
+  }
+  const resetPasswordToken = user.getResetPasswordToken();
+
+  await user.save();
+
+  const resetPasswordUrl = `http://localhost:5000/api/v1/auth/resetPassword?resetPasswordToken=${resetPasswordToken}`;
+
+  const emailTemplate = `
+      <h3>Reset Your Password</h3>
+      <p>This <a href = '${resetPasswordUrl}' target = '_blank'>link</a>  will expire in 1 hour</p>
+  `;
+  try {
+    await sendMail({
+      from: process.env.SMTP_EMAIL,
+      to: resetEmail,
+      subject: "Reset Password Token",
+      html: emailTemplate,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Email Sent",
+      data: user,
+    });
+  } catch (err) {
+    user.resetPasswordToken = null;
+    user.resetPasswordExpire = null;
+
+    user.save();
+
+    return next(new CustomError("Email Could Not Be Sent", 500));
+  }
 });
 
 module.exports = {
@@ -88,4 +128,5 @@ module.exports = {
   login,
   logout,
   imageUpload,
+  forgotPassword,
 };
