@@ -122,6 +122,29 @@ const forgotPassword = errorWrapper(async (req, res, next) => {
   }
 });
 
+const resetPassword = errorWrapper(async (req, res, next) => {
+  const { resetPasswordToken } = req.query;
+  const { password } = req.body;
+
+  if (!resetPasswordToken) {
+    return next(new CustomError("Please provide a valid token", 400));
+  }
+  let user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(new CustomError("Invalid Token or Session Expired", 404));
+  }
+  user.password = password;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpire = null;
+
+  user = await user.save();
+
+  sendTokenToClient(user, res, 200);
+});
+
 module.exports = {
   register,
   getLoggedInUser,
@@ -129,4 +152,5 @@ module.exports = {
   logout,
   imageUpload,
   forgotPassword,
+  resetPassword
 };
