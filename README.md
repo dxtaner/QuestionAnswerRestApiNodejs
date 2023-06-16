@@ -31,6 +31,62 @@ To start the application, run the following command:
 
 The application will be accessible at `http://localhost:<port_number>`, where `<port_number>` is the value provided in the `.env` file.
 
+Router.js Description File
+==========================
+
+This file defines a routing mechanism used in an Express.js application. The router is used to route incoming requests to the appropriate handler functions.
+
+Requirements
+------------
+
+This code assumes the following modules are installed:
+
+*   `express`: Express.js framework.
+*   `auth`: A module used for authentication operations.
+*   `admin`: A module used to manage admin operations.
+*   `user`: A module used to manage user operations.
+*   `question`: A module used to manage question operations.
+
+Creating the Router
+-------------------
+
+    const express = require("express");
+    const auth = require("./auth");
+    const admin = require("./admin");
+    const user = require("./user");
+    const question = require("./question");
+    
+    const router = express.Router();
+    
+
+In this section, the `express` module and the required modules are imported, and a `router` object is created.
+
+Configuring the Routing
+-----------------------
+
+    router.use("/auth", auth);
+    router.use("/admin", admin);
+    router.use("/users", user);
+    router.use("/questions", question);
+    
+
+In this section, the `router` object is used to route incoming requests to the appropriate handlers.
+
+*   The path `/auth` is routed to the `auth` module, which handles authentication operations.
+*   The path `/admin` is routed to the `admin` module, which manages admin operations.
+*   The path `/users` is routed to the `user` module, which manages user operations.
+*   The path `/questions` is routed to the `question` module, which manages question operations.
+
+Exporting the Router
+--------------------
+
+    module.exports = router;
+    
+
+In this section, the created `router` object is made accessible from other files.
+
+This file is used to create a routing structure in an Express.js application. It manages the operations on the respective paths of the modules and routes incoming requests to the appropriate handlers.
+
 API Routes
 ----------
 
