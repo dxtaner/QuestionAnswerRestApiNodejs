@@ -1,7 +1,7 @@
 const User = require("../models/User.js");
 const CustomError = require("../helpers/error/customError.js");
 const errorWrapper = require("../helpers/error/errorWrapper.js");
-const sendTokenToClient = require("../helpers/authorization/auth.js");
+// const sendTokenToClient = require("../helpers/authorization/auth.js");
 const bcrypt = require("bcryptjs");
 const sendMail = require("../helpers/libraries/sendEmail.js");
 
@@ -145,6 +145,46 @@ const resetPassword = errorWrapper(async (req, res, next) => {
   sendTokenToClient(user, res, 200);
 });
 
+const updateDetails = errorWrapper(async (req, res, next) => {
+  const updateDetails = req.body;
+
+  const user = await User.findByIdAndUpdate(req.user.id, updateDetails, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Details Updated",
+    data: user,
+  });
+});
+
+const sendTokenToClient = (user, res, status) => {
+  // Get Token From User Model
+  const token = user.getTokenFromUserModel();
+
+  const { JWT_COOKIE_EXPIRE, NODE_ENV } = process.env;
+
+  // Send To Client With Res
+  return res
+    .status(status)
+    .cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + parseInt(JWT_COOKIE_EXPIRE) * 1000 * 60),
+      secure: NODE_ENV === "development" ? false : true,
+    })
+    .json({
+      success: true,
+      token,
+      data: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+};
+
 module.exports = {
   register,
   getLoggedInUser,
@@ -152,5 +192,6 @@ module.exports = {
   logout,
   imageUpload,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  updateDetails,
 };
