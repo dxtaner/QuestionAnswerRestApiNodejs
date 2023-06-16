@@ -5,8 +5,8 @@ const CustomError = require("../helpers/error/customError.js");
 const getAllUsers = errorWrapper(async (req, res, next) => {
   const user = await User.find();
   return res.status(200).json({
-    success:true,
-    data:user,
+    success: true,
+    data: user,
   });
 });
 
@@ -21,7 +21,35 @@ const getSingleUser = errorWrapper(async (req, res, next) => {
   });
 });
 
+const deleteUser = errorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  await user.remove();
+
+  return res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
+const getBlockUser = errorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  await User.updateOne({ _id: user._id }, { blocked: !user.blocked });
+
+  return res.status(200).json({
+    success: true,
+    message: "User Blocked Successfully",
+  });
+});
+
 module.exports = {
   getSingleUser,
-  getAllUsers
+  getAllUsers,
+  deleteUser,
+  getBlockUser,
 };
