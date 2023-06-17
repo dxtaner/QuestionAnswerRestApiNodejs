@@ -7,6 +7,8 @@ const {
   getSingleQuestion,
   editQuestion,
   deleteQuestion,
+  likeQuestion,
+  undoLikeQuestion,
 } = require("../controllers/question.js");
 
 const {
@@ -33,5 +35,7 @@ router.delete(
   [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess],
   deleteQuestion
 );
+router.get("/:id/like", [getAccessToRoute, checkQuestionExist], likeQuestion);
+router.get("/:id/undo_like", [getAccessToRoute, checkQuestionExist], undoLikeQuestion);
 
 module.exports = router;
