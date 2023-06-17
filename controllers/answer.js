@@ -40,8 +40,8 @@ const getSingleAnswer = errorWrapper(async (req, res, next) => {
   const { answer_id } = req.params;
 
   const answer = await Answer.findById(answer_id)
-    .populate({ path: "user", select: "name profile_image" })
-    .populate({ path: "question", select: "title" });
+    .populate({ path: "user", select: "name profile_image role "})
+    .populate({ path: "question", select: "title createdAt" });
 
   res.status(200).json({
     success: true,
