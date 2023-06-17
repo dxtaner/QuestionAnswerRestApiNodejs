@@ -47,7 +47,7 @@ const logout = errorWrapper(async (req, res, next) => {
   // Send To Client With Res
   return res
     .status(200)
-    .cookie("token", null, {
+    .cookie("access_token", null, {
       httpOnly: true,
       expires: new Date(Date.now()),
       secure: NODE_ENV === "development" ? false : true,
@@ -166,21 +166,23 @@ const sendTokenToClient = (user, res, status) => {
 
   const { JWT_COOKIE_EXPIRE, NODE_ENV } = process.env;
 
+  // console.log(token)
   // Send To Client With Res
   return res
     .status(status)
-    .cookie("token", token, {
+    .cookie("access_token", token, {
       httpOnly: true,
       expires: new Date(Date.now() + parseInt(JWT_COOKIE_EXPIRE) * 1000 * 60),
       secure: NODE_ENV === "development" ? false : true,
     })
     .json({
       success: true,
-      token,
+      access_token: token,
       data: {
         name: user.name,
         email: user.email,
         role: user.role,
+        profile: user.profile_image,
       },
     });
 };
