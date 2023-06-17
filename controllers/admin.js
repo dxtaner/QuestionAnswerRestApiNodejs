@@ -24,13 +24,11 @@ const getSingleUser = errorWrapper(async (req, res, next) => {
 const deleteUser = errorWrapper(async (req, res, next) => {
   const { id } = req.params;
 
-  const user = await User.findById(id);
-
-  await user.remove();
+  await User.findByIdAndDelete(id);
 
   return res.status(200).json({
     success: true,
-    data: {},
+    message: "User deleted",
   });
 });
 
