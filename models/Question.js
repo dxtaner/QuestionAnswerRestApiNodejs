@@ -24,6 +24,12 @@ const QuestionSchema = new Schema({
     ref: "User",
     required: true,
   },
+  likes: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 // Pre Save Method
