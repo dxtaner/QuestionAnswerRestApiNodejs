@@ -22,6 +22,21 @@ const addNewAnswerToQuestion = errorWrapper(async (req, res, next) => {
   });
 });
 
+const getAllAnswersByQuestion = errorWrapper(async (req, res, next) => {
+  const { question_id } = req.params;
+
+  const question = await Question.findById(question_id).populate("answers");
+
+  const answers = question.answers;
+
+  res.status(200).json({
+    success: true,
+    answerCount: answers.length,
+    data: answers,
+  });
+});
+
 module.exports = {
   addNewAnswerToQuestion,
+  getAllAnswersByQuestion,
 };
