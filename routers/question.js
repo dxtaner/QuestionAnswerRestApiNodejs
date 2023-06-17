@@ -1,5 +1,6 @@
 const express = require("express");
 const Question = require("../models/Question.js");
+const answer = require("./answer.js");
 
 const {
   askNewQuestion,
@@ -36,6 +37,12 @@ router.delete(
   deleteQuestion
 );
 router.get("/:id/like", [getAccessToRoute, checkQuestionExist], likeQuestion);
-router.get("/:id/undo_like", [getAccessToRoute, checkQuestionExist], undoLikeQuestion);
+router.get(
+  "/:id/undo_like",
+  [getAccessToRoute, checkQuestionExist],
+  undoLikeQuestion
+);
+
+router.use("/:question_id/answers", checkQuestionExist, answer);
 
 module.exports = router;
