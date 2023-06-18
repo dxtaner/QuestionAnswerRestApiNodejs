@@ -67,9 +67,14 @@ const questionSortHelper = (query, req) => {
   return query.sort("-createdAt");
 };
 
+const populateHelper = (query, populate) => {
+  return query.populate(populate);
+};
+
 module.exports = {
   searchHelper,
   getPaginatorVariables,
   paginationHelper,
   questionSortHelper,
+  populateHelper,
 };
