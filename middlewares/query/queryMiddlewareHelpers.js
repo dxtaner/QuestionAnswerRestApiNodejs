@@ -10,6 +10,52 @@ const searchHelper = (searchKey, query, req) => {
   return query;
 };
 
+const getPaginatorVariables = async (req, total) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 4;
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const pagination = {};
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  return {
+    pagination,
+    startIndex,
+    limit,
+  };
+};
+
+const paginationHelper = async (model, query, req) => {
+  const total = await model.countDocuments();
+
+  const { pagination, startIndex, limit } = await getPaginatorVariables(
+    req,
+    total
+  );
+
+  return {
+    query: query.skip(startIndex).limit(limit),
+    pagination: Object.keys(pagination).length === 0 ? undefined : pagination,
+  };
+};
+
 module.exports = {
   searchHelper,
+  getPaginatorVariables,
+  paginationHelper,
 };
