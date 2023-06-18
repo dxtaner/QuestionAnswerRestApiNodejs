@@ -67,9 +67,26 @@ const editAnswer = errorWrapper(async (req, res, next) => {
   });
 });
 
+const deleteAnswer = errorWrapper(async (req, res, next) => {
+  const { question_id, answer_id } = req.params;
+
+  const answer = await Answer.findByIdAndRemove(answer_id);
+  // await answer.save();
+
+  const question = await Question.findById(question_id);
+  question.answers.splice(question.answers.indexOf(this._id), 1);
+  await question.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Answer Deleted Successfully",
+  });
+});
+
 module.exports = {
   addNewAnswerToQuestion,
   getAllAnswersByQuestion,
   getSingleAnswer,
   editAnswer,
+  deleteAnswer,
 };
