@@ -83,10 +83,54 @@ const deleteAnswer = errorWrapper(async (req, res, next) => {
   });
 });
 
+const likeAnswer = errorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+
+  const answer = await Answer.findById(answer_id);
+
+  if (answer.likes.includes(req.user.id)) {
+    return next(new CustomError("You already liked this answer", 400));
+  }
+  answer.likes.push(req.user.id);
+  answer.likeCount += 1;
+
+  await answer.save();
+
+  return res.status(200).json({
+    success: true,
+    data: answer,
+  });
+});
+
+const undoLikeAnswer = errorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+
+  const answer = await Answer.findById(answer_id);
+
+  if (!answer.likes.includes(req.user.id)) {
+    return next(
+      new CustomError("You can not undo like operation for this answer", 400)
+    );
+  }
+  const index = answer.likes.indexOf(req.user.id);
+
+  answer.likes.splice(index, 1);
+  answer.likeCount -= 1;
+
+  await answer.save();
+
+  res.status(200).json({
+    success: false,
+    data: answer,
+  });
+});
+
 module.exports = {
   addNewAnswerToQuestion,
   getAllAnswersByQuestion,
   getSingleAnswer,
   editAnswer,
   deleteAnswer,
+  likeAnswer,
+  undoLikeAnswer,
 };
