@@ -9,6 +9,7 @@ const {
   getAllAnswersByQuestion,
   getSingleAnswer,
   editAnswer,
+  deleteAnswer,
 } = require("../controllers/answer.js");
 const {
   checkQuestionAndAnswerExist,
@@ -21,8 +22,13 @@ router.post("/", [getAccessToRoute], addNewAnswerToQuestion);
 
 router.put(
   "/:answer_id/edit",
-  [checkQuestionAndAnswerExist,getAccessToRoute, getAnswerOwnerAccess],
+  [checkQuestionAndAnswerExist, getAccessToRoute, getAnswerOwnerAccess],
   editAnswer
+);
+router.delete(
+  "/:answer_id/delete",
+  [checkQuestionAndAnswerExist, getAccessToRoute, getAnswerOwnerAccess],
+  deleteAnswer
 );
 
 module.exports = router;
