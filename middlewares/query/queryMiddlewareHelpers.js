@@ -54,8 +54,22 @@ const paginationHelper = async (model, query, req) => {
   };
 };
 
+const questionSortHelper = (query, req) => {
+  const sortKey = req.query.sortBy;
+
+  if (sortKey === "most-answered") {
+    return query.sort(`-answerCount -title`);
+  }
+  if (sortKey === "most-liked") {
+    return query.sort(`-likeCount -title`);
+  }
+  // Else
+  return query.sort("-createdAt");
+};
+
 module.exports = {
   searchHelper,
   getPaginatorVariables,
   paginationHelper,
+  questionSortHelper,
 };
