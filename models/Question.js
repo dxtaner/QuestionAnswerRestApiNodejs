@@ -30,6 +30,17 @@ const QuestionSchema = new Schema({
       ref: "User",
     },
   ],
+  likeCount: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  answers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Answer",
+    },
+  ],
 });
 
 // Pre Save Method
