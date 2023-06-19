@@ -18,22 +18,11 @@ const askNewQuestion = errorWrapper(async (req, res, next) => {
 });
 
 const getAllQuestions = errorWrapper(async (req, res, next) => {
-  const questions = await Question.find();
-
-  return res.status(200).json({
-    success: true,
-    data: questions,
-  });
+  return res.status(200).json(res.advanceQueryResults);
 });
 
 const getSingleQuestion = errorWrapper(async (req, res, next) => {
-  const { id } = req.params;
-  const question = await Question.findById(id);
-
-  return res.status(200).json({
-    success: true,
-    data: question,
-  });
+  return res.status(200).json(res.advanceQueryResults);
 });
 
 const editQuestion = errorWrapper(async (req, res, next) => {
