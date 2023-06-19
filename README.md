@@ -103,6 +103,58 @@ The application exposes the following API routes:
 
 Please refer to the respective controller files for detailed endpoint information and implementation details.
 
+Question Router
+===============
+
+This is a router module for handling various endpoints related to questions in an Express application. It provides routes for creating, retrieving, updating, and deleting questions, as well as liking and undoing likes on questions.
+
+Installation
+------------
+
+1.  Create a new directory for your project and navigate into it.
+2.  Initialize a new Node.js project using the command: `npm init`
+3.  Install the required dependencies by running: `npm install express`
+4.  Create a new file, e.g., `questionRouter.js`, and copy the code into it.
+5.  In the file where you configure your Express application, import and use the `questionRouter` as a middleware.
+
+Usage
+-----
+
+    const express = require("express");
+    const questionRouter = require("./questionRouter.js");
+    
+    const app = express();
+    
+    // Other middleware and configurations
+    
+    app.use("/questions", questionRouter);
+    
+    // Start the server
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000.");
+    });
+    
+
+Endpoints
+---------
+
+*   `GET /questions`: Retrieves all questions.
+*   `GET /questions/:id`: Retrieves a single question by ID.
+*   `POST /questions/ask`: Creates a new question. Requires authentication.
+*   `PUT /questions/:id/edit`: Edits a question. Requires authentication and ownership of the question.
+*   `DELETE /questions/:id/delete`: Deletes a question. Requires authentication and ownership of the question.
+*   `GET /questions/:id/like`: Likes a question. Requires authentication.
+*   `GET /questions/:id/undo_like`: Undoes a like on a question. Requires authentication.
+
+Additionally, the router uses the `answerRouter` as a sub-router for handling answers to specific questions. The answer routes are nested under the question routes as follows:
+
+*   `GET /questions/:question_id/answers`: Retrieves all answers for a specific question.
+*   More answer routes can be defined in the `answer.js` module.
+
+Please note that certain routes require authentication and ownership of the question, which are handled by the provided middleware functions.
+
+Feel free to modify and extend this router module to fit your application's specific needs.
+
 Static Files
 ------------
 
