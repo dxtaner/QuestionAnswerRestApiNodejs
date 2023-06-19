@@ -12,6 +12,11 @@ const AnswerSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  likeCount: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   likes: [
     {
       type: mongoose.Schema.ObjectId,
@@ -37,7 +42,8 @@ AnswerSchema.pre("save", async function (next) {
     const question = await Question.findById(this.question);
 
     question.answers.push(this.id);
-    // question.answerCount += 1;
+    question.answerCount += 1;
+
     await question.save();
     next();
   } catch (err) {
