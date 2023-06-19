@@ -189,6 +189,55 @@ Please note that certain routes require authentication and ownership of the ques
 
 Feel free to modify and extend this router module to fit your application's specific needs.
 
+Answer Router
+=============
+
+This is a router module for handling endpoints related to answers in an Express application. It provides routes for adding, retrieving, editing, and deleting answers to a specific question. Additionally, it allows users to like or undo like an answer.
+
+Installation
+------------
+
+1.  Create a new directory for your project and navigate into it.
+2.  Initialize a new Node.js project using the command: `npm init`
+3.  Install the required dependencies by running: `npm install express`
+4.  Create a new file, e.g., `answerRouter.js`, and copy the code into it.
+5.  In the file where you configure your Express application, import and use the `answerRouter` as a middleware.
+
+Usage
+-----
+
+    const express = require("express");
+    const answerRouter = require("./answerRouter.js");
+    
+    const app = express();
+    
+    // Other middleware and configurations
+    
+    app.use("/questions/:question_id/answers", answerRouter);
+    
+    // Start the server
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000.");
+    });
+    
+
+Endpoints
+---------
+
+*   `GET /questions/:question_id/answers`: Retrieves all answers for a specific question.
+*   `GET /questions/:question_id/answers/:answer_id`: Retrieves a single answer by ID.
+*   `POST /questions/:question_id/answers`: Adds a new answer to a specific question. Requires authentication.
+*   `PUT /questions/:question_id/answers/:answer_id/edit`: Edits an answer. Requires authentication and ownership of the answer.
+*   `DELETE /questions/:question_id/answers/:answer_id/delete`: Deletes an answer. Requires authentication and ownership of the answer.
+*   `GET /questions/:question_id/answers/:answer_id/like`: Likes an answer. Requires authentication.
+*   `GET /questions/:question_id/answers/:answer_id/undo_like`: Undoes a like on an answer. Requires authentication.
+
+Please note that certain routes require authentication and ownership of the answer, which are handled by the provided middleware functions.
+
+Additionally, the router uses the `mergeParams` option to merge the parameters from the parent question router (`questionsRouter`) into the answer router, allowing access to the `:question_id` parameter within the answer routes.
+
+Feel free to modify and extend this router module to fit your application's specific needs.
+
 Static Files
 ------------
 
