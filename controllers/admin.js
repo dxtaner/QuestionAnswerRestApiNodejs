@@ -1,13 +1,8 @@
 const User = require("../models/User.js");
 const errorWrapper = require("../helpers/error/errorWrapper.js");
-const CustomError = require("../helpers/error/customError.js");
 
 const getAllUsers = errorWrapper(async (req, res, next) => {
-  const user = await User.find();
-  return res.status(200).json({
-    success: true,
-    data: user,
-  });
+  return res.status(200).json(res.advanceQueryResults);
 });
 
 const getSingleUser = errorWrapper(async (req, res, next) => {
@@ -39,9 +34,13 @@ const getBlockUser = errorWrapper(async (req, res, next) => {
 
   await User.updateOne({ _id: user._id }, { blocked: !user.blocked });
 
+  const message = !user.blocked
+    ? `User: ${user.name} Blocked Successfully`
+    : `User: ${user.name} Unblocked Successfully`;
+
   return res.status(200).json({
     success: true,
-    message: "User Blocked Successfully",
+    message: message,
   });
 });
 
