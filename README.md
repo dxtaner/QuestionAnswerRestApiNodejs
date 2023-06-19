@@ -1,4 +1,4 @@
-QuestionAnswerRestApiNodejs
+Question&AnswerRestApiNodejs
 ============
 
 Installation
@@ -87,21 +87,55 @@ In this section, the created `router` object is made accessible from other files
 
 This file is used to create a routing structure in an Express.js application. It manages the operations on the respective paths of the modules and routes incoming requests to the appropriate handlers.
 
-API Routes
-----------
+Auth Router
 
-The application exposes the following API routes:
+Auth Router
+===========
 
-*   `/api/auth/register` - Register a new user.
-*   `/api/auth/login` - User login.
-*   `/api/auth/logout` - User logout (requires authentication).
-*   `/api/auth/user` - Get logged-in user details (requires authentication).
-*   `/api/auth/upload` - Upload a profile image (requires authentication and file upload).
-*   `/api/auth/edit` - Update user details (requires authentication).
-*   `/api/auth/forgotpassword` - Request password reset.
-*   `/api/auth/resetpassword` - Reset user password.
+This is a router module for handling authentication-related endpoints in an Express application. It provides routes for user registration, login, logout, profile image upload, forgot password functionality, and updating user details.
 
-Please refer to the respective controller files for detailed endpoint information and implementation details.
+Installation
+------------
+
+1.  Create a new directory for your project and navigate into it.
+2.  Initialize a new Node.js project using the command: `npm init`
+3.  Install the required dependencies by running: `npm install express multer`
+4.  Create a new file, e.g., `authRouter.js`, and copy the code into it.
+5.  In the file where you configure your Express application, import and use the `authRouter` as a middleware.
+
+Usage
+-----
+
+    const express = require("express");
+    const authRouter = require("./authRouter.js");
+    
+    const app = express();
+    
+    // Other middleware and configurations
+    
+    app.use("/auth", authRouter);
+    
+    // Start the server
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000.");
+    });
+    
+
+Endpoints
+---------
+
+*   `POST /auth/register`: Registers a new user.
+*   `POST /auth/login`: Logs in a user.
+*   `GET /auth/logout`: Logs out the currently logged-in user. Requires authentication.
+*   `GET /auth/user`: Retrieves the currently logged-in user. Requires authentication.
+*   `PUT /auth/upload`: Uploads a profile image for the logged-in user. Requires authentication and a "profile\_image" field in the request body.
+*   `PUT /auth/edit`: Updates the details of the logged-in user. Requires authentication.
+*   `POST /auth/forgotpassword`: Sends a password reset email to the user's registered email address.
+*   `PUT /auth/resetpassword`: Resets the user's password based on a password reset token.
+
+Please note that certain routes require authentication, which is handled by the `getAccessToRoute` middleware function.
+
+Feel free to modify and extend this router module to fit your application's specific needs.
 
 Question Router
 ===============
