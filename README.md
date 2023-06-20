@@ -87,7 +87,49 @@ In this section, the created `router` object is made accessible from other files
 
 This file is used to create a routing structure in an Express.js application. It manages the operations on the respective paths of the modules and routes incoming requests to the appropriate handlers.
 
-Auth Router
+Admin Router
+============
+
+This is a router module for handling administrative actions in an Express application. It provides routes for blocking a user and deleting a user.
+
+Installation
+------------
+
+1.  Create a new directory for your project and navigate into it.
+2.  Initialize a new Node.js project using the command: `npm init`
+3.  Install the required dependencies by running: `npm install express`
+4.  Create a new file, e.g., `adminRouter.js`, and copy the code into it.
+5.  In the file where you configure your Express application, import and use the `adminRouter` as a middleware.
+
+Usage
+-----
+
+    const express = require("express");
+    const adminRouter = require("./adminRouter.js");
+    
+    const app = express();
+    
+    // Other middleware and configurations
+    
+    app.use("/admin", adminRouter);
+    
+    // Start the server
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000.");
+    });
+    
+
+Endpoints
+---------
+
+*   `GET /admin/block/:id`: Blocks a user by their ID. Requires authentication and admin access.
+*   `DELETE /admin/user/:id`: Deletes a user by their ID. Requires authentication and admin access.
+
+Please note that these routes require authentication and admin access, which are handled by the provided middleware functions.
+
+Additionally, the router uses the `checkUserExist` middleware function to ensure that the specified user exists in the database before performing the block or delete action.
+
+Feel free to modify and extend this router module to fit your application's specific needs.
 
 Auth Router
 ===========
