@@ -88,7 +88,11 @@ In this section, the created `router` object is made accessible from other files
 This file is used to create a routing structure in an Express.js application. It manages the operations on the respective paths of the modules and routes incoming requests to the appropriate handlers.
 
 Admin Router
+
+Admin Router
 ============
+
+This is a router module for handling administrative actions related to users in an Express application. It provides routes for retrieving user profiles and getting a list of all users.
 
 This is a router module for handling administrative actions in an Express application. It provides routes for blocking a user and deleting a user.
 
@@ -121,6 +125,13 @@ Usage
 
 Endpoints
 ---------
+
+*   `GET /admin`: Retrieves a list of all users. Supports pagination, sorting, and filtering using query parameters.
+*   `GET /admin/profile/:id`: Retrieves the profile of a single user by their ID.
+
+Please note that the `userQueryMiddleware` is used to handle the query parameters for filtering, sorting, and pagination in the `/admin` route. The `checkUserExist` middleware ensures that the specified user exists in the database before retrieving their profile.
+
+Feel free to modify and extend this router module to fit your application's specific needs.
 
 *   `GET /admin/block/:id`: Blocks a user by their ID. Requires authentication and admin access.
 *   `DELETE /admin/user/:id`: Deletes a user by their ID. Requires authentication and admin access.
